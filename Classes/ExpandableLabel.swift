@@ -62,7 +62,9 @@ open class ExpandableLabel: UILabel {
         }
     }
     
-    /// Set 'true' if the label can be expanded or 'false' if not.
+    /// The default value is '2.0'.
+    @IBInspectable open var lineHeightMultiple: CGFloat = 1.0
+
     /// The default value is 'true'.
     @IBInspectable open var shouldExpand: Bool = true
     
@@ -158,7 +160,7 @@ open class ExpandableLabel: UILabel {
     
     open override var attributedText: NSAttributedString? {
         set(attributedText) {
-            if let attributedText = attributedText?.copyWithAddedFontAttribute(font).copyWithParagraphAttribute(font), attributedText.length > 0 {
+            if let attributedText = attributedText?.copyWithAddedFontAttribute(font).copyWithParagraphAttribute(font, self.lineHeightMultiple), attributedText.length > 0 {
                 self.collapsedText = getCollapsedText(for: attributedText, link: (linkHighlighted) ? collapsedAttributedLink.copyWithHighlightedColor() : self.collapsedAttributedLink)
                 self.expandedText = getExpandedText(for: attributedText, link: (linkHighlighted) ? expandedAttributedLink?.copyWithHighlightedColor() : self.expandedAttributedLink)
                 super.attributedText = (self.collapsed) ? self.collapsedText : self.expandedText
@@ -447,9 +449,9 @@ private extension NSAttributedString {
         return font != nil
     }
     
-    func copyWithParagraphAttribute(_ font: UIFont) -> NSAttributedString {
+    func copyWithParagraphAttribute(_ font: UIFont, _ lineHeightMultiple: CGFloat) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.0;
+        paragraphStyle.lineHeightMultiple = lineHeightMultiple;
         paragraphStyle.alignment = .left
         paragraphStyle.minimumLineHeight = font.lineHeight;
         paragraphStyle.maximumLineHeight = font.lineHeight;
