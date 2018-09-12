@@ -76,7 +76,7 @@ open class ExpandableLabel: UILabel {
     /// The default value is "More". Cannot be nil.
     @objc open var collapsedAttributedLink: NSAttributedString! {
         didSet {
-            self.collapsedAttributedLink = collapsedAttributedLink.copyWithAddedFontAttribute(font)
+            self.collapsedAttributedLink = collapsedAttributedLink.copyWithAddedFontAttribute(font).copyWithParagraphAttribute(font, self.lineHeightMultiple)
         }
     }
     
@@ -88,7 +88,7 @@ open class ExpandableLabel: UILabel {
     /// The default value is "...". Can be nil.
     @objc open var ellipsis: NSAttributedString? {
         didSet {
-            self.ellipsis = ellipsis?.copyWithAddedFontAttribute(font)
+            self.ellipsis = ellipsis?.copyWithAddedFontAttribute(font).copyWithParagraphAttribute(font, self.lineHeightMultiple)
         }
     }
     
@@ -234,7 +234,7 @@ open class ExpandableLabel: UILabel {
         if let link = link, textWillBeTruncated(expandedText) {
             let spaceOrNewLine = expandedLinkPosition == nil ? "  " : "\n"
 			expandedText.append(NSAttributedString(string: "\(spaceOrNewLine)"))
-			expandedText.append(NSMutableAttributedString(string: "\(link.string)", attributes: link.attributes(at: 0, effectiveRange: nil)).copyWithAddedFontAttribute(font))
+			expandedText.append(NSMutableAttributedString(string: "\(link.string)", attributes: link.attributes(at: 0, effectiveRange: nil)).copyWithAddedFontAttribute(font).copyWithParagraphAttribute(font, self.lineHeightMultiple))
             expandedLinkTextRange = NSMakeRange(expandedText.length - link.length, link.length)
         }
         
